@@ -12,6 +12,12 @@ require 'capybara/poltergeist'
 Capybara.default_driver = :poltergeist
 Capybara.run_server = false
 
+options = {:js_errors => false}
+Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(app, options)
+end
+
+
 enable :sessions
 set :protection, :except => :frame_options
 
