@@ -1,0 +1,47 @@
+.prezi-item{
+    display: block;
+    float: left;
+    width: 100%;
+    margin: 5px 10px;
+}
+
+li.prezi-item > img, li.prezi-item > div {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.prezi-item .prezi-item-content{
+}
+
+.prezi-item .prezi-item-info{
+
+}
+
+div.prezi-item-interaction button[type="button"]{
+    display: inline-block;
+    border: 1px solid black;
+    background-color: darkgray;
+    color: white;
+    text-decoration: none;
+    padding: 4px 10px;
+    font-size: x-large;
+}
+
+div.prezi-item-interaction button[type="button"]:hover{
+    cursor: pointer;
+}
+
+div.prezi-item-interaction button[type="button"]:first-child:hover{
+    background-color: gray;
+}
+
+div.prezi-item-interaction button[type="button"]:last-child {
+    background-color: darkgreen;
+}
+
+div.prezi-item-interaction button[type="button"]:last-child:hover {
+    background-color: green;
+}

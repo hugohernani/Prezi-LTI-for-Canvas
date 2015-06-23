@@ -1,0 +1,17 @@
+#prezi-content{
+    text-align: center;
+    vertical-align: top;
+    margin: 4px;
+}
+
+#prezi-content button[type="button"]{
+    margin: 2px auto;
+    font-size: xx-large;
+    display: block;
+    border: 1px solid black;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    padding: 6px 14px;
+    text-align: center;
+}

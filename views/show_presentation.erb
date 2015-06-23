@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="css/show_presentation.css">
+
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="javascript/prezi_player.js"></script>
+
+<script>
+    var prezi_id = "<%= prezi_id %>"
+    var url_to_embed = "<%= return_embed_url %>"
+
+    $(document).ready(function() {
+        var player = new PreziPlayer('prezi-player', {preziId: prezi_id, width: "90%", height: 450, controls:true});
+    });
+
+    function embed(){
+        location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
+    }
+</script>
+
+<div id="prezi-content">
+    <div id="prezi-player"></div>
+    <button type="button" onclick="embed()">Embed</button>
+</div>

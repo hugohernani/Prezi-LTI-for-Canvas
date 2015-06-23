@@ -1,0 +1,119 @@
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script>
+
+<link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
+<script type="application/javascript">
+
+var url_to_embed = "<%= return_embed_url %>"
+var current_page = 1;
+
+function render_prezis(prezis){
+    source   = $("#search-feed-template").html();
+    template = Handlebars.compile(source);
+    context = JSON.parse(prezis);
+
+    target = $(".search-feed");
+    target.empty();
+    target.html(template(context));
+    if(context.has_items) target.prepend("<h2>"+context.message+"</h2>");
+}
+
+function callOnPrezi(next_page, most_popular){
+    most_popular = most_popular || false;
+    next_page = next_page || current_page;
+
+    if (!most_popular) {
+        if (next_page == 1) {
+            $("#bt_previous_page").prop("disabled", true);
+            $("#bt_next_page").prop("disabled", false);
+        } else if (next_page >= 1) {
+            $("#bt_previous_page").prop("disabled", false);
+            $("#bt_next_page").prop("disabled", true);
+        }
+        current_page = next_page;
+        $("#current_page").text("Page " + current_page);
+    }else{
+        $(".page_navigation").hide();
+    }
+
+    console.log("here");
+
+    search_prezi_field = $("#search_prezi");
+    if (search_prezi_field.data('oldVal') != search_prezi_field.val()) {
+        search_prezi_field.data('oldVal', search_prezi_field.val());
+
+        var url = most_popular ? "call_prezi" : "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
+        if (search_prezi_field.val().length != 0 || most_popular){
+            $.ajax({
+                url: url
+            }).done(function(prezis) {
+                render_prezis(prezis);
+            });
+        }
+    }
+}
+
+function embed(prezi_id){
+    location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
+}
+
+function redirect_to(prezi_id){
+    location.href = "call_prezi?prezi_id="+prezi_id+"&launch_presentation_return_url="+url_to_embed;
+}
+
+
+$(document).ready(function() {
+    callOnPrezi(1, true);
+
+    // some triggers
+    $("#search_prezi_trigger").click(function(){
+        callOnPrezi()
+    });
+    $("#bt_previous_page").click(function(){
+        callOnPrezi(next_page=current_page-1);
+    });
+    $("#bt_next_page").click(function(){
+        callOnPrezi(next_page=current_page+1);
+    });
+});
+</script>
+
+<div>
+    Working on it. Not finished...<br>
+    <div>
+      <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
+      <button id="search_prezi_trigger" type="button">Search</button>
+    </div>
+    <div class="search-feed">
+    </div>
+    <ul class="page_navigation">
+      <li><button id="bt_previous_page" type="button"></button>Prev</li>
+      <li id="current_page"></li>
+      <li><button id="bt_next_page" type="button"></button> Next</li>
+    </ul>
+
+</div>
+<script id="search-feed-template" type="text/x-handlebars-template">
+    {{#if has_items }}
+        <ul>
+        {{#each objects}}
+            <li class="prezi-item">
+              <a href="#" onclick=redirect_to("{{prezi_id}}")><img src="{{thumbnail}}" alt="Prezi"/></a>
+              <div class="prezi-item-content">
+                    <div class="prezi-item-info">
+                        <h3>{{title}}</h3>
+                        <p>{{info}}</p>
+                    </div>
+                    <div class="prezi-item-interaction">
+                        <button type="button" onclick=redirect_to("{{prezi_id}}")>Open Prezi</button>
+                        <button type="button" onclick=embed("{{prezi_id}}")>Embed</button>
+                    </div>
+                </div>
+            </li>
+        {{/each}}
+        </ul>
+    {{/if}}
+    {{#unless has_items}}
+        <h3>Sorry, but it seems there is nothing to show...</h3>
+    {{/unless}}
+</script>
