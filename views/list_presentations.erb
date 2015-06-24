@@ -2,6 +2,9 @@
 <script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script>
 
 <link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
+
+<link rel="stylesheet" type="text/css" href="css/loader.css">
+
 <script type="application/javascript">
 
 var url_to_embed = "<%= return_embed_url %>"
@@ -41,7 +44,7 @@ function callOnPrezi(next_page, most_popular){
 
         var url = most_popular ? "call_prezi" : "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
         if (search_prezi_field.val().length != 0 || most_popular){
-          $( ".loading" ).show();
+          $( ".loader_container" ).show();
             $(".search-feed").empty();
             $.ajax({
                 url: url
@@ -61,7 +64,7 @@ function redirect_to(prezi_id){
 }
 
 $(document).ajaxStop(function() {
-  $( ".loading" ).hide();
+  $(".loader_container").hide();
 });
 
 $(document).ready(function() {
@@ -80,13 +83,37 @@ $(document).ready(function() {
 });
 </script>
 
-<div>
-    Working on it. Not finished...<br>
-    <div>
+<div class="content">
+    <div class="search_container">
       <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
       <button id="search_prezi_trigger" type="button">Search</button>
     </div>
-    <div class="loading">Loading...</div>
+
+    <div class="loader_container">
+        <ul class="loader">
+            <li>
+                <div class="circle"></div>
+                <div class="ball"></div>
+            </li>
+            <li>
+                <div class="circle"></div>
+                <div class="ball"></div>
+            </li>
+            <li>
+                <div class="circle"></div>
+                <div class="ball"></div>
+            </li>
+            <li>
+                <div class="circle"></div>
+                <div class="ball"></div>
+            </li>
+            <li>
+                <div class="circle"></div>
+                <div class="ball"></div>
+            </li>
+        </ul>
+    </div>
+
     <div class="search-feed">
     </div>
     <ul class="page_navigation">
