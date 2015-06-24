@@ -13,7 +13,6 @@ function render_prezis(prezis){
     context = JSON.parse(prezis);
 
     target = $(".search-feed");
-    target.empty();
     target.html(template(context));
     if(context.has_items) target.prepend("<h2>"+context.message+"</h2>");
 }
@@ -36,14 +35,14 @@ function callOnPrezi(next_page, most_popular){
         $(".page_navigation").hide();
     }
 
-    console.log("here");
-
     search_prezi_field = $("#search_prezi");
     if (search_prezi_field.data('oldVal') != search_prezi_field.val()) {
         search_prezi_field.data('oldVal', search_prezi_field.val());
 
         var url = most_popular ? "call_prezi" : "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
         if (search_prezi_field.val().length != 0 || most_popular){
+          $( ".loading" ).show();
+            $(".search-feed").empty();
             $.ajax({
                 url: url
             }).done(function(prezis) {
@@ -61,6 +60,9 @@ function redirect_to(prezi_id){
     location.href = "call_prezi?prezi_id="+prezi_id+"&launch_presentation_return_url="+url_to_embed;
 }
 
+$(document).ajaxStop(function() {
+  $( ".loading" ).hide();
+});
 
 $(document).ready(function() {
     callOnPrezi(1, true);
@@ -84,6 +86,7 @@ $(document).ready(function() {
       <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
       <button id="search_prezi_trigger" type="button">Search</button>
     </div>
+    <div class="loading">Loading...</div>
     <div class="search-feed">
     </div>
     <ul class="page_navigation">

@@ -74,9 +74,11 @@ module GetWebPage
   class WebScraper
     include Capybara::DSL
 
-    def initialize(filter_phrase = nil)
+      def initialize(filter_phrase = nil, page_number, prezi_url)
       @list_of_placement = {}
       @filter_phrase = filter_phrase
+      @page_number = page_number
+      @prezi_url = prezi_url
     end
 
     def extract_content_into_json(page)
@@ -99,12 +101,15 @@ module GetWebPage
         prezis.push prezi_obj
       }
 
-      message = @filter_phrase.nil? ? "The #{divs.length} most popular presentations on Prezi.com" : "Search: " + @filter_phrase
+      message = @filter_phrase.nil? ? "#{divs.length} most popular presentations on Prezi.com/" : "Search: " + @filter_phrase
       has_items = prezis.length > 0 ? true : false
       message = "No more results. Sorry. :/" unless has_items
       res = {
           :has_items => has_items,
           :message => message,
+          :quantity => prezis.length,
+          :page => @page_number.nil? ? 1 : @page_number,
+          :prezi_url => @prezi_url,
           :objects => prezis
       }
       res.to_json
@@ -112,6 +117,7 @@ module GetWebPage
 
 
     def get_page_data(url, placement_id)
+
       return @list_of_placement[placement_id] if @list_of_placement.has_key?(placement_id)
         response = nil
         if @filter_phrase.nil?
@@ -169,14 +175,14 @@ get '/call_prezi' do
     if prezi_id = params["prezi_id"]
         erb :show_presentation, :locals => {:prezi_id => prezi_id, :return_embed_url => params["launch_presentation_return_url"]}
     else
+#        headers 'Content-Type' => 'application/json'
+
         search_url = "https://prezi.com/explore/search/?search=SEARCH_TITLE#search=SEARCH_TITLE&reusable=false&page=PAGE_NUMBER&users=less"
-        url = !params["search_title"].nil? ?
-            search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("PAGE_NUMBER", params["page_number"]) :
-            "https://prezi.com/explore/popular/"
+        url = !params["search_title"].nil? ? search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("PAGE_NUMBER", params["page_number"]) : "https://prezi.com/explore/popular/"
 
         placement_id = params['resource_link_id']
         placement_id = placement_id +             params['tool_consumer_instance_guid'] unless            params['tool_consumer_instance_guid'].nil?
-        scrapper = GetWebPage::WebScraper.new(params["search_title"])
+        scrapper = GetWebPage::WebScraper.new(params["search_title"], params["page_number"], url)
         scrapper.get_page_data(url, placement_id)
     end
 end
