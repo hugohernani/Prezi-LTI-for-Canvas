@@ -81,6 +81,33 @@ module GetWebPage
       @prezi_url = prezi_url
     end
 
+      def extract_json_from_json(json_origin)
+          objs_json_array = JSON.parse json_origin
+          prezis = Array.new
+          objs_json_array["objects"].each do |obj|
+            prezi_obj = {
+                :title => obj["title"],
+                :url => "/"+obj["id"]+"/",
+                :prezi_id => obj["id"],
+                :info => obj["description"],
+                :thumbnail => obj["thumb_url"]
+            }
+            prezis.push prezi_obj
+          end
+
+          has_items = prezis.length > 0 ? true : false
+          message = has_items ? "Search: " + @filter_phrase : "No more results. Sorry. :/"
+          res = {
+            :has_items => has_items,
+            :message => message,
+            :quantity => prezis.length,
+            :page => @page_number.nil? ? 1 : @page_number,
+            :prezi_url => @prezi_url,
+            :objects => prezis
+            }
+          res.to_json
+      end
+
     def extract_content_into_json(page)
       puts "Lets extract..."
       prezis = Array.new
@@ -131,43 +158,11 @@ module GetWebPage
         end
 
         doc = @filter_phrase.nil? ? Nokogiri::HTML(response.body) : Nokogiri::HTML(page.html)
-        json_response = extract_content_into_json(doc)
+        json_response = @filter_phrase.nil? ? extract_content_into_json(doc) : extract_json_from_json(doc)
         @list_of_placement[placement_id] = json_response
         json_response
     end
   end
-end
-
-def parse_html_to_json(body, filter_phrase = nil)
-  puts "Lets parse..."
-  prezis = Array.new
-  page = Nokogiri::HTML(body)
-  divs = page.css("div[class='prezi-list-item thumbnail']")
-  # divs_other = page.css("div")
-  # puts "Divs other: " + divs_other.to_s
-
-  # puts "Divs: " + divs.to_s
-  divs.each{ |div|
-    link = div.css("div[class=thumbnail-info] a")
-    prezi_obj = {
-        :title => div.css("div[class=caption] div[class=caption-inner] h3")[0]["data-shorttext"],
-        :thumbnail => div.css("a[class=landing-link] img")[0]["src"],
-        :url => "/"+div["data-oid"]+"/",
-        :prezi_id => div["data-oid"]
-    }
-    prezi_obj["info"] = link[0].text unless link.nil?
-    prezis.push prezi_obj
-  }
-
-  message = filter_phrase.nil? ? "The #{divs.length} most popular presentations on Prezi.com" : "Search: " + filter_phrase
-  has_items = prezis.length > 0 ? true : false
-  message = "No more results. Sorry. :/" unless has_items
-  res = {
-      :has_items => has_items,
-      :message => message,
-      :objects => prezis
-  }
-  res.to_json
 end
 
 get '/call_prezi' do
@@ -176,15 +171,23 @@ get '/call_prezi' do
         erb :show_presentation, :locals => {:prezi_id => prezi_id, :return_embed_url => params["launch_presentation_return_url"]}
     else
 #        headers 'Content-Type' => 'application/json'
+        limit = 12
 
-        search_url = "https://prezi.com/explore/search/?search=SEARCH_TITLE#search=SEARCH_TITLE&reusable=false&page=PAGE_NUMBER&users=less"
-        url = !params["search_title"].nil? ? search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("PAGE_NUMBER", params["page_number"]) : "https://prezi.com/explore/popular/"
+        # CALLING THE API
+        search_url = "https://search.prezi.com/explore/?search=SEARCH_TITLE&order_by=relevance&limit="+limit.to_s+"&offset=OFF_SET"
+
+        url = !params["search_title"].nil? ? search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("OFF_SET", ((params["page_number"].to_i() -1) * limit).to_s) : "https://prezi.com/explore/popular/"
 
         placement_id = params['resource_link_id']
         placement_id = placement_id +             params['tool_consumer_instance_guid'] unless            params['tool_consumer_instance_guid'].nil?
         scrapper = GetWebPage::WebScraper.new(params["search_title"], params["page_number"], url)
         scrapper.get_page_data(url, placement_id)
     end
+end
+
+get '/test_lti' do
+    erb :list_presentations, :locals => {:return_embed_url => "nothing"};
+
 end
 
 # The url for launching the tool
