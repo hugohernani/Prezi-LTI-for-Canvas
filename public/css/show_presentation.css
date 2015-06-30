@@ -4,14 +4,23 @@
     margin: 4px;
 }
 
+#interaction{
+    display: inline-block;
+}
+
 #prezi-content button[type="button"]{
     margin: 2px auto;
     font-size: xx-large;
-    display: block;
+    display: inline-block;
     border: 1px solid black;
     background-color: green;
     color: white;
     text-decoration: none;
     padding: 6px 14px;
     text-align: center;
+}
+
+#prezi-content button[type="button"]:hover{
+    cursor: pointer;
+    background-color: lightgreen;
 }

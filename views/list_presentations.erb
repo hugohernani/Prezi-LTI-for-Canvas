@@ -9,50 +9,64 @@
 
 var url_to_embed = "<%= return_embed_url %>"
 var current_page = 1;
+var current_url = "";
 
-function render_prezis(prezis){
+function set_navigation_status(has_next){
+    has_next = has_next || false;
+
+    if (has_next) {
+        $("#more_items").show();
+    } else{
+        $("#more_items").hide();
+    }
+}
+
+function render_loader(target_selector){
+    target_selector = target_selector || ".search-feed"
+    source = $("#loader-template").html();
+    template = Handlebars.compile(source);
+    target = $(target_selector);
+    target.append(template({}));
+}
+
+function render_prezis(prezis, calling_more){
     source   = $("#search-feed-template").html();
     template = Handlebars.compile(source);
     context = JSON.parse(prezis);
 
     target = $(".search-feed");
-    target.html(template(context));
-    if(context.has_items) target.prepend("<h2>"+context.message+"</h2>");
+    if(calling_more) target.append(template(context))
+    else target.html(template(context));
+    if(context.has_items && !calling_more) target.prepend("<h2>"+context.message+"</h2>");
+
+    set_navigation_status(context.has_next);
 }
 
-function callOnPrezi(next_page, most_popular){
-    most_popular = most_popular || false;
-    next_page = next_page || current_page;
-
-    if (!most_popular) {
-        if (next_page == 1) {
-            $("#bt_previous_page").prop("disabled", true);
-            $("#bt_next_page").prop("disabled", false);
-        } else if (next_page >= 1) {
-            $("#bt_previous_page").prop("disabled", false);
-            $("#bt_next_page").prop("disabled", true);
-        }
-        current_page = next_page;
-        $("#current_page").text("Page " + current_page);
-    }else{
-        $(".page_navigation").hide();
-    }
+function callOnPrezi(calling_more){
+    calling_more = calling_more || false;
 
     search_prezi_field = $("#search_prezi");
-    if (search_prezi_field.data('oldVal') != search_prezi_field.val()) {
-        search_prezi_field.data('oldVal', search_prezi_field.val());
 
-        var url = most_popular ? "call_prezi" : "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
-        if (search_prezi_field.val().length != 0 || most_popular){
-          $( ".loader_container" ).show();
-            $(".search-feed").empty();
-            $.ajax({
-                url: url
-            }).done(function(prezis) {
-                render_prezis(prezis);
-            });
-        }
+    if ((search_prezi_field.data('oldVal') != search_prezi_field.val() && search_prezi_field.val().length != 0) || calling_more) {
+        search_prezi_field.data('oldVal', search_prezi_field.val());
+        current_url = "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
+    }else{
+        current_url = "call_prezi";
     }
+
+    if(calling_more) {
+        current_page+=1;
+        render_loader();
+        current_url = "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
+    }
+    else render_loader(".search_container");
+    $.ajax({
+        url: current_url
+    }).done(function(prezis) {
+        render_prezis(prezis, calling_more);
+    });
+
+
 }
 
 function embed(prezi_id){
@@ -64,21 +78,19 @@ function redirect_to(prezi_id){
 }
 
 $(document).ajaxStop(function() {
-  $(".loader_container").hide();
+    $(".loader_container").remove();
 });
 
 $(document).ready(function() {
-    callOnPrezi(1, true);
+    callOnPrezi(false);
 
     // some triggers
     $("#search_prezi_trigger").click(function(){
-        callOnPrezi()
+        $(".search-feed").empty();
+        callOnPrezi(calling_more=false);
     });
-    $("#bt_previous_page").click(function(){
-        callOnPrezi(next_page=current_page-1);
-    });
-    $("#bt_next_page").click(function(){
-        callOnPrezi(next_page=current_page+1);
+    $("#bt_call_for_more").click(function(){
+        callOnPrezi(calling_more=true);
     });
 });
 </script>
@@ -89,6 +101,15 @@ $(document).ready(function() {
       <button id="search_prezi_trigger" type="button">Search</button>
     </div>
 
+    <div class="search-feed">
+    </div>
+    <div id="more_items">
+        <button id="bt_call_for_more" type="button">More</button>
+    </div>
+
+</div>
+
+<script id="loader-template" type="text/x-handlebars-template">
     <div class="loader_container">
         <ul class="loader">
             <li>
@@ -113,17 +134,10 @@ $(document).ready(function() {
             </li>
         </ul>
     </div>
+</script>
 
-    <div class="search-feed">
-    </div>
-    <ul class="page_navigation">
-      <li><button id="bt_previous_page" type="button"></button>Prev</li>
-      <li id="current_page"></li>
-      <li><button id="bt_next_page" type="button"></button> Next</li>
-    </ul>
-
-</div>
 <script id="search-feed-template" type="text/x-handlebars-template">
+<div class="list_per_search">
     {{#if has_items }}
         <ul>
         {{#each objects}}
@@ -146,4 +160,5 @@ $(document).ready(function() {
     {{#unless has_items}}
         <h3>Sorry, but it seems there is nothing to show...</h3>
     {{/unless}}
+</div>
 </script>

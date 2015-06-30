@@ -97,13 +97,15 @@ module GetWebPage
 
           has_items = prezis.length > 0 ? true : false
           message = has_items ? "Search: " + @filter_phrase : "No more results. Sorry. :/"
+
           res = {
             :has_items => has_items,
             :message => message,
             :quantity => prezis.length,
             :page => @page_number.nil? ? 1 : @page_number,
             :prezi_url => @prezi_url,
-            :objects => prezis
+            :objects => prezis,
+            :has_next => objs_json_array["meta"]["total_count"].to_i ? true : false
             }
           res.to_json
       end
@@ -176,7 +178,20 @@ get '/call_prezi' do
         # CALLING THE API
         search_url = "https://search.prezi.com/explore/?search=SEARCH_TITLE&order_by=relevance&limit="+limit.to_s+"&offset=OFF_SET"
 
-        url = !params["search_title"].nil? ? search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("OFF_SET", ((params["page_number"].to_i() -1) * limit).to_s) : "https://prezi.com/explore/popular/"
+        off_set = 0
+        url = "https://prezi.com/explore/popular/"
+        page = params["page_number"]
+        if(!page.nil?)
+            page = page.to_i()
+            if page > 1
+                off_set = (page-1) * limit + page
+            end
+            url = search_url.gsub!("SEARCH_TITLE", params["search_title"]).gsub!("OFF_SET", off_set.to_s)
+        end
+
+        puts "offset: " + off_set.to_s
+        puts "limit: " + limit.to_s
+        puts "url: " + url
 
         placement_id = params['resource_link_id']
         placement_id = placement_id +             params['tool_consumer_instance_guid'] unless            params['tool_consumer_instance_guid'].nil?

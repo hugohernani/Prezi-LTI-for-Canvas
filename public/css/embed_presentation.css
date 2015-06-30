@@ -21,8 +21,14 @@
 }
 
 .search-feed{
+    display: block;
     text-align: center;
-    float: left;
+    clear: both;
+}
+
+.search-feed h2{
+    margin-top: 5px;
+    display: block;
 }
 
 .search-feed ul{
@@ -90,4 +96,28 @@ div.prezi-item-interaction button[type="button"]:last-child {
 
 div.prezi-item-interaction button[type="button"]:last-child:hover {
     background-color: green;
+}
+
+div#more_items {
+    text-align: center;
+    display: block;
+    clear: both;
+    margin: 0 auto;
+}
+
+div#more_items button[type="button"]{
+    display: block;
+    border: 1px solid black;
+    background-color: darkgray;
+    color: white;
+    text-decoration: none;
+    padding: 4px 10px;
+    font-size: xx-large;
+    margin: 0 auto;
+    padding: 3px 10px;
+}
+
+div#more_items button[type="button"]:hover{
+    cursor: pointer;
+    background-color: gray;
 }

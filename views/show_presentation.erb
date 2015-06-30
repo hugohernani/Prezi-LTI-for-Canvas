@@ -15,9 +15,17 @@
     function embed(){
         location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
     }
+
+    function goBack(){
+        history.go(-1);
+    }
+
 </script>
 
 <div id="prezi-content">
     <div id="prezi-player"></div>
-    <button type="button" onclick="embed()">Embed</button>
+    <div id="interaction">
+        <button type="button" onclick="embed()">Embed</button>
+        <button type="button" onclick="goBack()">Go Back</button>
+    </div>
 </div>
