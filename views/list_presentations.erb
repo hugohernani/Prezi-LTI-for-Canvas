@@ -59,14 +59,12 @@ function callOnPrezi(calling_more){
         render_loader();
         current_url = "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
     }
-    else render_loader(".search_container");
+    else render_loader(".search-bar");
     $.ajax({
         url: current_url
     }).done(function(prezis) {
         render_prezis(prezis, calling_more);
     });
-
-
 }
 
 function embed(prezi_id){
@@ -79,6 +77,13 @@ function redirect_to(prezi_id){
 
 $(document).ajaxStop(function() {
     $(".loader_container").remove();
+    ps_info = $(".prezi-item-info p")
+    for(var i = 0; i < ps_info.size(); i++){
+        temp_p = ps_info[i].textContent;
+        limit = temp_p.split(" ").slice(0, 10).join(" ").length
+        temp_p = temp_p.substring(0, limit) + "...";
+        ps_info[i].textContent = temp_p
+    }
 });
 
 $(document).ready(function() {
@@ -95,8 +100,8 @@ $(document).ready(function() {
 });
 </script>
 
-<div class="content">
-    <div class="search_container">
+<div>
+    <div class="search-bar">
       <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
       <button id="search_prezi_trigger" type="button">Search</button>
     </div>
@@ -158,7 +163,7 @@ $(document).ready(function() {
         </ul>
     {{/if}}
     {{#unless has_items}}
-        <h3>Sorry, but it seems there is nothing to show...</h3>
+        <h2>Sorry, but it seems there is nothing to show...</h2>
     {{/unless}}
 </div>
 </script>

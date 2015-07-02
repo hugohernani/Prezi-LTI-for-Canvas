@@ -1,82 +1,134 @@
-.content{
-    position: relative;
-    margin: 0 auto;
-    width: 95%;
+* {
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
 }
 
-.search_container{
-    width: 90%;
-    position: relative;
-    margin: 0 auto;
+#search_prezi_trigger {
+    width: 15%;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    border: 1px solid #ccc;
+    height: 40px
 }
 
-#search_prezi{
-    width: 90%;
-    float: left;
-    margin: 0 3px;
-}
-
-#search_prezi_trigger{
-  float: left;
-}
-
-.search-feed{
+#search_prezi {
+    margin-right: 2%;
+    width: 83%;
+    height: 40px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
     display: block;
+    float: left;
+    font-size: 14px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+#search_prezi_trigger:hover { background-color: #e6e6e6;}
+
+#search_prezi_trigger:active { background-color: #d4d4d4;}
+
+.search-feed h2 {
+    border-bottom: 1px solid #aaa;
     text-align: center;
+    width: 80%;
+    margin: 18px auto 5px auto;
+}
+.search-bar {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.list_per_search ul{
+    padding: 0px;
+    position: relative;
+    clear: both;
+    height: 100%;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.search-bar button, .prezi-item button, #more_items button {
+    -moz-user-select: none;
+    background-image: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    background-color: #fff;
+    border-color: #ccc;
+    color: #333;
+}
+
+#more_items{
+    position: relative;
+    display: block;
     clear: both;
 }
 
-.search-feed h2{
-    margin-top: 5px;
+#more_items button{
     display: block;
+    margin: 0 auto;
+    width: 100px;
 }
 
-.search-feed ul{
-    width: 100%;
-    margin: 0px auto;
-    padding: 0px;
-}
 
 .prezi-item{
+    border: 1px solid #e8e5e8;
+    box-shadow: 5px 5px 3px 0 rgba(222, 222, 222, 1);
     display: block;
-    width: 95%;
     float: left;
-    margin: 5px 10px;
-    background-color: aliceblue;
-    border: 2px dotted black;
-    padding: 10px;
+    margin: 10px;
+    min-height: 200px;
+    min-width: 600px;
+    width: 715px;
 }
 
-li.prezi-item > a{
-    display: inline-block;
-    width: 50%;
-    float: left;
-}
-
-li.prezi-item > div{
-    display: inline-block;
-    width: 50%;
-    float: left;
-}
-
-/*
 li.prezi-item > img, li.prezi-item > div {
-    padding: 10px;
+    display: block;
+    float: right;
+    position: relative;
+    right: 35px;
+    text-align: center;
+    vertical-align: middle;
+    width: 50%;
 }
-*/
 
-.prezi-item-content{
+.prezi-item .prezi-item-content{
 }
 
 .prezi-item .prezi-item-info{
+    padding: 0 30px;
+}
 
+.prezi-item a {
+    display: inline-block;
+    float: left;
+    left: 35px;
+    margin: 5px auto;
+    position: relative;
+    top: 15px;
+}
+
+.prezi-item-content .prezi-item-info h3 {
+    font-size: 20px;
+    margin: 10px 0;
 }
 
 div.prezi-item-interaction button[type="button"]{
     display: inline-block;
-    border: 1px solid black;
-    background-color: darkgray;
-    color: white;
+    border: 1px solid transparent;
     text-decoration: none;
     padding: 4px 10px;
     font-size: x-large;
@@ -86,38 +138,39 @@ div.prezi-item-interaction button[type="button"]:hover{
     cursor: pointer;
 }
 
+div.prezi-item-interaction button[type="button"]:first-child{
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    color: #fff;
+}
+
+
 div.prezi-item-interaction button[type="button"]:first-child:hover{
-    background-color: gray;
+    background-color: #31b0d5;
+    border-color: #269abc;
+    color: #fff;
+}
+
+div.prezi-item-interaction button[type="button"]:first-child:active{
+    background-color: #269abc;
+    border-color: #1b6d85;
+    color: #fff;
 }
 
 div.prezi-item-interaction button[type="button"]:last-child {
-    background-color: darkgreen;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff;
 }
 
 div.prezi-item-interaction button[type="button"]:last-child:hover {
-    background-color: green;
+    background-color: #449d44;
+    border-color: #398439;
+    color: #FFF;
 }
 
-div#more_items {
-    text-align: center;
-    display: block;
-    clear: both;
-    margin: 0 auto;
-}
-
-div#more_items button[type="button"]{
-    display: block;
-    border: 1px solid black;
-    background-color: darkgray;
-    color: white;
-    text-decoration: none;
-    padding: 4px 10px;
-    font-size: xx-large;
-    margin: 0 auto;
-    padding: 3px 10px;
-}
-
-div#more_items button[type="button"]:hover{
-    cursor: pointer;
-    background-color: gray;
+div.prezi-item-interaction button[type="button"]:last-child:active {
+    background-color: #398439;
+    border-color: #255625
+    color: #FFF;
 }

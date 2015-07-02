@@ -1,26 +1,61 @@
+* {
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
 #prezi-content{
     text-align: center;
     vertical-align: top;
     margin: 4px;
 }
 
-#interaction{
-    display: inline-block;
-}
-
 #prezi-content button[type="button"]{
-    margin: 2px auto;
-    font-size: xx-large;
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
     display: inline-block;
-    border: 1px solid black;
-    background-color: green;
-    color: white;
-    text-decoration: none;
-    padding: 6px 14px;
+    font-size: xx-large;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
     text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    height: 36px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 }
 
-#prezi-content button[type="button"]:hover{
-    cursor: pointer;
-    background-color: lightgreen;
+.back {
+    color: #555;
+}
+
+.back:hover {
+    background-color: #e6e6e6;
+}
+
+.back:active {
+    background-color: #d4d4d4;
+}
+
+.embed {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff;
+}
+
+.embed:hover {
+    background-color: #449d44;
+    border-color: #398439;
+    color: #FFF;
+}
+
+.embed:active {
+    background-color: #398439;
+    border-color: #255625
+    color: #FFF;
+}
+
+#interaction{
+    margin: 10px;
 }
