@@ -1,104 +1,18 @@
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
 
 <link rel="stylesheet" type="text/css" href="css/loader.css">
 
 <script type="application/javascript">
-
 var url_to_embed = "<%= return_embed_url %>"
-var current_page = 1;
-var current_url = "";
-
-function set_navigation_status(has_next){
-    has_next = has_next || false;
-
-    if (has_next) {
-        $("#more_items").show();
-    } else{
-        $("#more_items").hide();
-    }
-}
-
-function render_loader(target_selector){
-    target_selector = target_selector || ".search-feed"
-    source = $("#loader-template").html();
-    template = Handlebars.compile(source);
-    target = $(target_selector);
-    target.append(template({}));
-}
-
-function render_prezis(prezis, calling_more){
-    source   = $("#search-feed-template").html();
-    template = Handlebars.compile(source);
-    context = JSON.parse(prezis);
-
-    target = $(".search-feed");
-    if(calling_more) target.append(template(context))
-    else target.html(template(context));
-    if(context.has_items && !calling_more) target.prepend("<h2>"+context.message+"</h2>");
-
-    set_navigation_status(context.has_next);
-}
-
-function callOnPrezi(calling_more){
-    calling_more = calling_more || false;
-
-    search_prezi_field = $("#search_prezi");
-
-    if ((search_prezi_field.data('oldVal') != search_prezi_field.val() && search_prezi_field.val().length != 0) || calling_more) {
-        search_prezi_field.data('oldVal', search_prezi_field.val());
-        current_url = "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
-    }else{
-        current_url = "call_prezi";
-    }
-
-    if(calling_more) {
-        current_page+=1;
-        render_loader();
-        current_url = "call_prezi?search_title="+search_prezi_field.val()+"&page_number="+current_page;
-    }
-    else render_loader(".search-bar");
-    $.ajax({
-        url: current_url
-    }).done(function(prezis) {
-        render_prezis(prezis, calling_more);
-    });
-}
-
-function embed(prezi_id){
-    location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
-}
-
-function redirect_to(prezi_id){
-    location.href = "call_prezi?prezi_id="+prezi_id+"&launch_presentation_return_url="+url_to_embed;
-}
-
-$(document).ajaxStop(function() {
-    $(".loader_container").remove();
-    ps_info = $(".prezi-item-info p")
-    for(var i = 0; i < ps_info.size(); i++){
-        temp_p = ps_info[i].textContent;
-        limit = temp_p.split(" ").slice(0, 10).join(" ").length
-        temp_p = temp_p.substring(0, limit) + "...";
-        ps_info[i].textContent = temp_p
-    }
-});
-
-$(document).ready(function() {
-    callOnPrezi(false);
-
-    // some triggers
-    $("#search_prezi_trigger").click(function(){
-        $(".search-feed").empty();
-        callOnPrezi(calling_more=false);
-    });
-    $("#bt_call_for_more").click(function(){
-        callOnPrezi(calling_more=true);
-    });
-});
 </script>
+
+<script src="javascript/main_list.js" type="application/javascript"></script>
 
 <div>
     <div class="search-bar">
@@ -142,28 +56,26 @@ $(document).ready(function() {
 </script>
 
 <script id="search-feed-template" type="text/x-handlebars-template">
-<div class="list_per_search">
-    {{#if has_items }}
-        <ul>
-        {{#each objects}}
-            <li class="prezi-item">
-              <a href="#" onclick=redirect_to("{{prezi_id}}")><img src="{{thumbnail}}" alt="Prezi"/></a>
-              <div class="prezi-item-content">
-                    <div class="prezi-item-info">
-                        <h3>{{title}}</h3>
-                        <p>{{info}}</p>
-                    </div>
-                    <div class="prezi-item-interaction">
-                        <button type="button" onclick=redirect_to("{{prezi_id}}")>Open Prezi</button>
-                        <button type="button" onclick=embed("{{prezi_id}}")>Embed</button>
-                    </div>
-                </div>
-            </li>
-        {{/each}}
-        </ul>
-    {{/if}}
-    {{#unless has_items}}
-        <h2>Sorry, but it seems there is nothing to show...</h2>
-    {{/unless}}
-</div>
+{{#if has_items }}
+  {{#each objects}}
+    <article class="row prezi_item">
+      <div>
+        <a class="col-xs-6 thumbnail_link" href="#" onclick=redirect_to({{prezi_id}})><img src="{{thumbnail}}" alt="Prezi"/></a>
+      </div>
+      <div class="col-xs-6 prezi_item_content">
+            <div class="prezi-item-info">
+                <h3>{{title}}</h3>
+                <p>{{info}}</p>
+            </div>
+            <div class="prezi-item-interaction">
+                <button type="button" onclick=redirect_to("{{prezi_id}}")>Open Prezi</button>
+                <button type="button" onclick=embed("{{prezi_id}}")>Embed</button>
+            </div>
+      </div>
+    </article>
+  {{/each}}
+{{/if}}
+{{#unless has_items}}
+    <h2>Sorry, but it seems there is nothing to show...</h2>
+{{/unless}}
 </script>
