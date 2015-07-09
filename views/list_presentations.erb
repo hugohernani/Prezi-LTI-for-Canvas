@@ -1,84 +1,28 @@
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script>
+<!-- <script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script> -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
 
+<link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
 <link rel="stylesheet" type="text/css" href="css/loader.css">
 
 <script type="application/javascript">
 var url_to_embed = "<%= return_embed_url %>"
 var lti_type = "<%= lti_type %>"
 </script>
-
-<!-- <script src="javascript/main_list.js" type="application/javascript"></script> -->
 <script src="coffee/main.js"></script>
 
 
-<div>
-    <div class="search-bar">
+<main>
+    <section class="search-bar">
       <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
       <button id="search_prezi_trigger" type="button">Search</button>
-    </div>
+    </section>
 
-    <div class="search-feed">
-    </div>
-    <div id="more_items">
+    <section class="search-feed">
+    </section>
+    <section id="more_items">
         <button id="bt_call_for_more" type="button">More</button>
-    </div>
+    </section>
 
-</div>
-
-<script id="loader-template" type="text/x-handlebars-template">
-    <div class="loader_container">
-        <ul class="loader">
-            <li>
-                <div class="circle"></div>
-                <div class="ball"></div>
-            </li>
-            <li>
-                <div class="circle"></div>
-                <div class="ball"></div>
-            </li>
-            <li>
-                <div class="circle"></div>
-                <div class="ball"></div>
-            </li>
-            <li>
-                <div class="circle"></div>
-                <div class="ball"></div>
-            </li>
-            <li>
-                <div class="circle"></div>
-                <div class="ball"></div>
-            </li>
-        </ul>
-    </div>
-</script>
-
-<script id="search-feed-template" type="text/x-handlebars-template">
-{{#if has_items }}
-  {{#each objects}}
-    <article class="row prezi_item">
-      <div>
-        <a class="col-xs-6 thumbnail_link" href="#" onclick=redirect_to({{prezi_id}})><img src="{{thumbnail}}" alt="Prezi"/></a>
-      </div>
-      <div class="col-xs-6 prezi_item_content">
-            <div class="prezi-item-info">
-                <h3>{{title}}</h3>
-                <p>{{info}}</p>
-            </div>
-            <div class="prezi-item-interaction">
-                <button type="button" onclick=redirect_to("{{prezi_id}}")>Open Prezi</button>
-                <button type="button" onclick=embed("{{prezi_id}}")>Embed</button>
-            </div>
-      </div>
-    </article>
-  {{/each}}
-{{/if}}
-{{#unless has_items}}
-    <h2>Sorry, but it seems there is nothing to show...</h2>
-{{/unless}}
-</script>
+</main>

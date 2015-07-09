@@ -171,9 +171,9 @@ class ModPrezi.App
 
   embed: (prezi_id) =>
     url = ""
-    if @lti_type == "editor_button"
+    if lti_type == "editor_button"
       url = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350"
-    else if @lti_type == "resource_selection"
+    else if lti_type == "resource_selection"
       host = location.protocol + "%2F%2F" + location.hostname
       if (location.port)
         host = host + ":" + location.port
