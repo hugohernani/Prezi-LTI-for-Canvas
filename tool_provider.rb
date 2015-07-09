@@ -188,14 +188,14 @@ get '/call_prezi' do
         end
 
         placement_id = params['resource_link_id']
-        placement_id = placement_id +             params['tool_consumer_instance_guid'] unless            params['tool_consumer_instance_guid'].nil?
+        placement_id = placement_id + params['tool_consumer_instance_guid'] unless params['tool_consumer_instance_guid'].nil?
         scrapper = GetWebPage::WebScraper.new(params["search_title"], params["page_number"], url)
         scrapper.get_page_data(url, placement_id)
     end
 end
 
 get '/test_lti' do
-    erb :list_presentations, :locals => {:return_embed_url => "nothing", :lti_type => "editor_button"};
+    erb :list_presentations, :locals => {:return_embed_url => "", :lti_type => ""};
 
 end
 
@@ -250,6 +250,5 @@ end
 get "/coffee/*.js" do
   content_type "text/javascript"
   filename = params[:splat].first
-  # puts "filename: " + filename
   coffee "../public/coffee/#{filename}".to_sym
 end

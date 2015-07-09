@@ -1,38 +1,22 @@
-<link rel="stylesheet" type="text/css" href="css/show_presentation.css">
-
-
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="javascript/prezi_player.js"></script>
-
-<script>
-    var prezi_id = "<%= prezi_id %>"
-    var url_to_embed = "<%= return_embed_url %>"
-
-    $(document).ready(function() {
-        var player = new PreziPlayer('prezi-player', {preziId: prezi_id, width: "90%", height: 450, controls:true});
+<html lang="en">
+  <head>
+    <title>Embeded presentation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js" type="application/javascript"></script>
+    <script src="javascript/prezi_player.js" type="application/javascript"></script>
+    <script>
+    var prezi_id, url_to_embed, show_buttons
+    $(document).ready(function(){
+      prezi_id = "<%= prezi_id %>", url_to_embed = "<%= return_embed_url %>", show_buttons = <%= url_to_embed_sent %>
     });
-
-    <% if url_to_embed_sent %>
-    function embed(){
-      if(lti_type == "editor_button"){
-        location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
-      }else if(lti_type == "resource_selection"){
-        location.href = url_to_embed+"?return_type=lti_launch_url&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
-      }
-    }
-    function goBack(){
-        history.go(-1);
-    }
-    <% end %>
-
-</script>
-
-<div id="prezi-content">
-    <div id="prezi-player"></div>
-    <% if url_to_embed_sent %>
-    <div id="interaction">
-        <button type="button" class="embed" onclick="embed()">Embed</button>
-        <button type="button" class="back" onclick="goBack()">Go Back</button>
-    </div>
-    <% end %>
-</div>
+    </script>
+    <script src="coffee/embeded.js" type="application/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="css/show_presentation.css">
+  </head>
+  <body>
+    <main id="prezi-content">
+        <div id="prezi-player"></div>
+    </main>
+  </body>
+</html>

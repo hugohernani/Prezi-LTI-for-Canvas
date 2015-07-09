@@ -180,8 +180,10 @@ class ModPrezi.App
       url = url_to_embed+"?return_type=lti_launch_url&url=" + (host + "%2Flti_tool?" + "prezi_id=" + prezi_id)
       url += "%26resource_selected=1"
 
-    location.href = url
-
+    if(url.length != 0)
+      location.href = url
+    else
+      alert("Nowhere to embed")
 
 $(document).ready =>
   app = new ModPrezi.App("#search_prezi", "#search_prezi_trigger", "#bt_call_for_more", ".search-feed")

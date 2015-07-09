@@ -1,28 +1,33 @@
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<!-- <script src="javascript/handlebars-v3.0.3.js" type="application/javascript"></script> -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<html lang="en">
+  <head>
+    <title>List of Prezi presentations to embed on LTI Consumer systems</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js" type="application/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
+    <link rel="stylesheet" type="text/css" href="css/loader.css">
 
-<link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
-<link rel="stylesheet" type="text/css" href="css/loader.css">
-
-<script type="application/javascript">
-var url_to_embed = "<%= return_embed_url %>"
-var lti_type = "<%= lti_type %>"
-</script>
-<script src="coffee/main.js"></script>
-
-
-<main>
-    <section class="search-bar">
-      <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
-      <button id="search_prezi_trigger" type="button">Search</button>
-    </section>
-
-    <section class="search-feed">
-    </section>
-    <section id="more_items">
-        <button id="bt_call_for_more" type="button">More</button>
-    </section>
-
-</main>
+    <script type="application/javascript">
+    var url_to_embed, lti_type
+    $(document).ready(function() {
+      url_to_embed = "<%= return_embed_url %>", lti_type = "<%= lti_type %>"
+    });
+    </script>
+    <script src="coffee/main.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <main>
+        <section class="search-bar">
+          <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
+          <button id="search_prezi_trigger" type="button">Search</button>
+        </section>
+        <section class="search-feed">
+        </section>
+        <section id="more_items">
+            <button id="bt_call_for_more" type="button">More</button>
+        </section>
+    </main>
+  </body>
+</html>
