@@ -58,7 +58,16 @@ function callOnPrezi(calling_more){
 }
 
 function embed(prezi_id){
-    location.href = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
+  url = ""
+  if(lti_type == "editor_button"){
+    url = url_to_embed+"?return_type=iframe&url=" + "https%3A%2F%2Fprezi.com%2Fembed%2F" + prezi_id + "%2F&width=400&height=350";
+  }else if(lti_type == "resource_selection"){
+    host = location.protocol + "%2F%2F" + location.hostname;
+    if(location.port) host = host + ":" + location.port;
+    url = url_to_embed+"?return_type=lti_launch_url&url=" + (host + "%2Flti_tool?" + "prezi_id=" + prezi_id);
+    url += "%26resource_selected=1";
+  }
+  location.href = url
 }
 
 function redirect_to(prezi_id){
