@@ -162,14 +162,14 @@ def authorize!
 end
 
 def url_to_embed_sent(embed_url)
-  return embed_url ? true : false;
+  return embed_url != "" ? true : false;
 end
 
 get '/call_prezi' do
 
     if prezi_id = params["prezi_id"]
         erb :show_presentation, :locals => {:prezi_id => prezi_id, :return_embed_url => params["launch_presentation_return_url"],
-          :url_to_embed_sent => url_to_embed_sent(params["launch_presentation_return_url"])}
+          :url_to_embed_sent => url_to_embed_sent(params["launch_presentation_return_url"]), :lti_type => params["lti_type"]}
     else
 #        headers 'Content-Type' => 'application/json'
         limit = 12

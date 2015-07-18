@@ -36,14 +36,14 @@ class ModPrezi.Backend
       if params["page_number"] == 1
         @gui.cleanFeedContainer(true)
 
-    @gui.startLoading(enable_more_button)
+    @gui.startLoading()
     request = $.ajax(
       url: fetch_url
       type: 'GET'
       contentType: 'apllication/json'
     )
     .then (response) =>
-      @gui.stopLoading()
+      @gui.stopLoading(enable_more_button)
       ModPrezi.PreziRes.fromJson(response)
 
 class ModPrezi.Gui
@@ -51,6 +51,7 @@ class ModPrezi.Gui
     @feed_container = prezis_feed_container
     @cleanFeed = true
     @page_number = 1
+    @prezi_pair_count = 0
 
     $(search_field_dom).focus()
     $(search_field_dom).on 'keyup', (e) =>
@@ -68,6 +69,7 @@ class ModPrezi.Gui
     $(@more_trigger).on 'click', (e) =>
       e.preventDefault()
       @page_number += 1
+      $(@more_trigger).parent().hide()
       this.searchTrigger $(search_field_dom).val()
 
   searchTrigger: (search_value) =>
@@ -77,30 +79,37 @@ class ModPrezi.Gui
     @cleanFeed = cleanFeed
 
   preziRow: (prezi) =>
-    $("<article class='row prezi_item' data-oid='#{prezi.id}'>
-        <div>
-          <a id='prezi_item_thumbnail_link' class='col-xs-6 thumbnail_link' href='#'>
-            <img src='#{prezi.thumbnail}' alt='#{prezi.title}'/></a>
-        </div>
-        <div class='col-xs-6 prezi_item_content'>
-          <div class='prezi-item-info'>
-            <h3 id='prezi_item_title'>#{prezi.title}</h3>
+    $("<article class='col-xs-12 col-sm-6' data-oid='#{prezi.id}'>
+        <div class='thumbnail'>
+          <a href='#' id='prezi_item_thumbnail_link'>
+            <img class='img-rounded' src='#{prezi.thumbnail}' alt='#{prezi.title}'/>
+          </a>
+          <div class='caption text-center'>
+            <h3>#{prezi.title}</h3>
             <p id='prezi_item_description'>#{prezi.description}</p>
-          </div>
-          <div class='prezi-item-interaction'>
-            <button id='open_prezi_interaction' type='button'>Open Prezi</button>
-            <button id='embed_prezi_interaction' type='button' >Embed</button>
+            <p class='row'>
+              <button id='open_prezi_interaction' class='btn btn-primary btn-lg col-xs-4 col-xs-offset-1'>Preview</button>
+              <button id='embed_prezi_interaction' class='btn btn-success btn-lg col-xs-4 col-xs-offset-2'>Embed</button>
+            </p>
           </div>
         </div>
        </article>")
 
-  addPrezi: (prezi) =>
-    preziNode = @preziRow(prezi).appendTo(@feed_container)
+  addClearFix: =>
+    $("<article class='clearfix visible-xs-block visible-sm-block'></article>")
 
-    @reduceDescriptionLength(preziNode, prezi)
-    @bindRedirectFunction(preziNode, prezi.id)
-    @bindEmbedFunction(preziNode, prezi.id)
-    false
+  addPrezi: (prezi) =>
+    @prezi_pair_count++
+    if @prezi_pair_count == 3
+      @prezi_pair_count = 0
+      @addClearFix().appendTo(@feed_container)
+      false
+    else
+      preziNode = @preziRow(prezi).appendTo(@feed_container)
+      # @reduceDescriptionLength(preziNode, prezi)
+      @bindRedirectFunction(preziNode, prezi.id)
+      @bindEmbedFunction(preziNode, prezi.id)
+      false
 
   reduceDescriptionLength: (preziNode, prezi) =>
     preziNode.find('#prezi_item_description').text(prezi.reduceDescriptionLength())
@@ -121,26 +130,27 @@ class ModPrezi.Gui
         <div class='ball'></div>
       </li>")
 
-  startLoading: (enable_more_button) =>
-    # It shouldn't be put here...
-    $(@more_trigger).parent().toggle(enable_more_button);
-
-    loading = $("<div class='loader_container'>
+  startLoading: =>
+    loading_row = $("<div class='row' id='loading_row'>
+                  <div class='loader_container col-xs-8 col-xs-offset-3 col-sm-4 col-sm-offset-5'>
                     <ul class='loader'>
                     </ul>
-                  </div>")
-    loader = loading.find('.loader')
+                  </div>
+                 </div>")
+    loader = loading_row.find('.loader')
     for num in [1..4]
       @circleBall().appendTo(loader)
     if(@cleanFeed)
-      $(@feed_container).empty();
+      $(@feed_container).empty()
       @cleanFeed = false
-    $(@feed_container).after(loading)
+    $(@feed_container).after(loading_row)
 
-  stopLoading: =>
-    loading = $('.loader_container')
-    if (loading)
-      loading.remove();
+  stopLoading: (enable_more_button) =>
+    $(@more_trigger).parent().toggle(enable_more_button)
+
+    loading_row = $('#loading_row')
+    if (loading_row)
+      loading_row.remove();
 
 class ModPrezi.App
   constructor: (search_field_dom, search_trigger, more_trigger, prezis_feed_container) ->
@@ -167,7 +177,7 @@ class ModPrezi.App
       .fail(@gui.fetchPrezisFailed)
 
   redirect_to: (prezi_id) =>
-    location.href = "call_prezi?prezi_id="+prezi_id+"&launch_presentation_return_url="+url_to_embed;
+    location.href = "call_prezi?prezi_id="+prezi_id+"&launch_presentation_return_url="+url_to_embed+"&lti_type="+lti_type;
 
   embed: (prezi_id) =>
     url = ""

@@ -8,7 +8,8 @@
     <script>
     var prezi_id, url_to_embed, show_buttons
     $(document).ready(function(){
-      prezi_id = "<%= prezi_id %>", url_to_embed = "<%= return_embed_url %>", show_buttons = <%= url_to_embed_sent %>
+      prezi_id = "<%= prezi_id %>", url_to_embed = "<%= return_embed_url %>", show_buttons = <%= url_to_embed_sent %>,
+      lti_type = "<%= lti_type %>"
     });
     </script>
     <script src="coffee/embeded.js" type="application/javascript"></script>

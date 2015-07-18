@@ -6,7 +6,6 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js" type="application/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/embed_presentation.css">
     <link rel="stylesheet" type="text/css" href="css/loader.css">
 
     <script type="application/javascript">
@@ -18,16 +17,27 @@
     <script src="coffee/main.js" type="application/javascript"></script>
   </head>
   <body>
-    <main>
-        <section class="search-bar">
-          <input type="text" id="search_prezi" alt="Search in Prezi.com" maxlength="80" name="search_prezi" size="50" placeholder="What are you looking for in Prezi.com" autofocus />
-          <button id="search_prezi_trigger" type="button">Search</button>
-        </section>
-        <section class="search-feed">
-        </section>
-        <section id="more_items">
-            <button id="bt_call_for_more" type="button">More</button>
-        </section>
+    <main class="container">
+
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid row">
+          <a class="navbar-brand col-md-2 col-xs-6 col-xs-offset-3" href="#">Prezi LTI Tool</a>
+          <div class="input-group navbar-btn col-md-10 col-xs-12">
+            <input type="text" id="search_prezi" class="form-control" placeholder="What are you looking for on Prezi.com?" autofocus>
+            <span class="input-group-btn">
+              <button id="search_prezi_trigger" class="btn btn-default" type="button">Go!</button>
+            </span>
+          </div>
+        </div>
+      </nav>
+
+      <section class="search-feed row">
+      </section>
+
+      <div class="row" style="padding:10px 0px; display: none;">
+          <button id="bt_call_for_more" class="btn btn-info btn-lg col-xs-4 col-xs-offset-4">More</button>
+      </div>
+
     </main>
   </body>
 </html>
