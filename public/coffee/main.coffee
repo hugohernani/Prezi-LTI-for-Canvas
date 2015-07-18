@@ -96,7 +96,7 @@ class ModPrezi.Gui
        </article>")
 
   addClearFix: =>
-    $("<article class='clearfix visible-xs-block visible-sm-block'></article>")
+    $("<article class='clearfix visible-xs-block visible-sm-block visible-md-block visible-lg-block'></article>")
 
   addPrezi: (prezi) =>
     @prezi_pair_count++
