@@ -1,13 +1,9 @@
-# Example LTI Tool Provider Using ims-lti Gem
+# Prezi Learning Tools Interoperability (LTI) Provider Using ims-lti Ruby Gem
 
-This is a basic and simple LTI Tool Provider that uses the
-[ims-lti](https://github.com/instructure/ims-lti) gem.
-To get this running in your development environment, check out the repo then:
+This is a **tool provider** which makes use of ims-lti gem to generate XML configuration required to LMS (Learning Management system) as Canvas.
 
-    bundle install
-    shotgun
+This ruby app **scrappes** html/css code on [Prezi.com](https://prezi.com/explore/popular/) and render pages on Canvas enabling a teacher/admin to embed *Prezi presentations* on the system.
 
-You can use the XML from the `/tool_config.xml` endpoint to configure the tool in a Tool Consumer.
+One of them rendered pages can be seen on the **test** page at https://prezi-tp.herokuapp.com/test_lti
 
-You can use this with the [example LTI Tool Consumer](https://github.com/instructure/lti_tool_consumer_example)
-to do some simple LTI testing.
+Configuration can be found here: https://prezi-tp.herokuapp.com/
